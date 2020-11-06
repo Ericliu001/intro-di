@@ -2,20 +2,22 @@ package com.uber.di;
 
 public class HomePage {
 
-    private HomeScope scope = new HomeScopeImpl();
     private Profile profile;
+    private RootScope rootScope;
 
     public void login(String name, String email) {
         profile = new Profile(name, email);
     }
 
     public void signOut() {
-        profile = null;
+        throw new UnsupportedOperationException();
     }
 
     public void onAttach() {
-        if (profile != null) {
-            DrawerController drawerController = scope.drawerScope(profile).drawerController();
-        }
+        rootScope = new RootScopeImpl();
+    }
+
+    public void openDrawer() {
+        DrawerController drawerController = rootScope.homePageScope(profile).drawerController();
     }
 }

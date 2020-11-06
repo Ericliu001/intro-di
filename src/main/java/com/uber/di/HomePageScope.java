@@ -1,38 +1,27 @@
 package com.uber.di;
 
-public class HomePageScope {
+@motif.Scope
+public interface HomePageScope {
+    // Access method
+    ProfileController profileController();
+    RewardsController rewardsController();
+    DrawerController drawerController();
 
-    private Profile profile;
-    private ProfileController profileController;
-    private RewardsController rewardController;
-    private DrawerController drawerController;
 
-    public DrawerController drawerController() {
-        if (drawerController == null) {
-            drawerController = new DrawerController(profileController(), rewardsController());
-        }
-        return drawerController;
-    }
+    @motif.Objects
+    abstract class Objects {
 
-    public RewardsController rewardsController() {
-        if (rewardController == null) {
-            rewardController = new RewardsController(profile());
-        }
-        return rewardController;
-    }
-
-    public Profile profile() {
-        if (profile == null) {
-            profile = new Profile("eric", "eric.liu@uber.com");
-        }
-        return profile;
-    }
-
-    public ProfileController profileController() {
-        if (profileController == null) {
-            profileController = new ProfileController(profile());
+        RewardsController rewardsController(Profile profile) {
+            return new RewardsController(profile);
         }
 
-        return profileController;
+        ProfileController profileController(Profile profile) {
+            return new ProfileController(profile);
+        }
+
+        DrawerController drawerController(ProfileController profileController,
+                RewardsController rewardsController) {
+            return new DrawerController(profileController, rewardsController);
+        }
     }
 }
